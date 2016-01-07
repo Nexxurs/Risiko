@@ -70,7 +70,7 @@ public class Main extends Application {
                     path.getElements().add(line);
                     i=i+2;
                 }
-                path.setFill(Color.GRAY);
+                path.setFill(Owner.Unowned.color);
                 path.setId(nameNoSpace);
                 path.setOnMouseClicked(me -> mouseClickHandler(me));
                 root.getChildren().add(path);
