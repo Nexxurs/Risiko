@@ -1,23 +1,16 @@
 package main;
 
 import javafx.application.Application;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -30,7 +23,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //Group root = new Group();
         Pane root = new Pane();
         root.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,null,null)));
 
@@ -55,7 +47,7 @@ public class Main extends Application {
             nameNoSpace=name.replace(" ","");
 
             if(parts[0].equals("patch-of")){
-                //With Path (nicht so schön)
+
                 Path path = new Path();
                 MoveTo moveTo = new MoveTo();
                 moveTo.setX(Double.parseDouble(parts[i]));
@@ -68,36 +60,12 @@ public class Main extends Application {
                     line.setX(Double.parseDouble(parts[i]));
                     line.setY(Double.parseDouble(parts[i+1]));
                     path.getElements().add(line);
-                    i=i+2;
                 }
                 path.setFill(Owner.Unowned.color);
                 path.setId(nameNoSpace);
                 path.setOnMouseClicked(me -> mouseClickHandler(me));
                 root.getChildren().add(path);
 
-		    		/* Mit Line und Group statt Path, Karte schaut schöner aus, aber Füllung wird schwer
-		    		int i = 1;
-		    		String name="";
-		    		while(parts[i].matches("[A-Za-z]+")){
-		    			name+=parts[i];
-		    			i++;
-		    		}
-		    		Group nation = new Group();
-		    		int oldX=0,oldY=0;
-		    		for(;i<parts.length;i=i+2){
-		    			if(oldX!=0&&oldY!=0){
-		    				Line line = new Line();
-		    				line.setStartX(oldX);
-		    				line.setStartY(oldY);
-		    				line.setEndX(Integer.parseInt(parts[i]));
-		    				line.setEndY(Integer.parseInt(parts[i+1]));
-		    				nation.getChildren().add(line);
-		    			}
-		    			oldX = Integer.parseInt(parts[i]);
-		    			oldY = Integer.parseInt(parts[i+1]);
-		    		}
-		    		root.getChildren().add(nation);
-		    		*/
             }
             else if(parts[0].equals("capital-of")){
                 Nation nation = new Nation(name);
@@ -152,9 +120,6 @@ public class Main extends Application {
             }
         }
         br.close();
-
-        System.out.println("Continent Size: "+system.getContinents().size());
-        System.out.println("Nations Size: "+system.getNations().size());
 
         Scene scene = new Scene(root,1300,650);
         primaryStage.setTitle("All those Territories");
