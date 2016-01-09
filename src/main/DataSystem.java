@@ -1,6 +1,8 @@
 package main;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +15,13 @@ public class DataSystem {
     private static DataSystem system;
     private Map<String, Nation> nations;
     private Map<String, Continent> continents;
+    private boolean isPlayerOnesTurn = true;
+    private StringProperty status;
 
 
-    public DataSystem(){
+
+    private DataSystem(){
+        status = new SimpleStringProperty("Status");
 
 
     }
@@ -30,18 +36,25 @@ public class DataSystem {
         if(nations==null) nations = new HashMap<>();
         return nations;
     }
-/*
-    public void setNations(Map<String, Nation> nations) {
-        this.nations = nations;
+
+    public String getStatus() {
+        return status.get();
     }
-*/
+
+    public StringProperty statusProperty() {
+        return status;
+    }
+
     public Map<String, Continent> getContinents() {
         if(continents == null) continents=new HashMap<>();
         return continents;
     }
-/*
-    public void setContinents(Map<String, Continent> continents) {
-        this.continents = continents;
+
+    public boolean isPlayerOnesTurn() {
+        return isPlayerOnesTurn;
     }
-*/
+
+    public void setPlayerOnesTurn(boolean playerOnesTurn) {
+        isPlayerOnesTurn = playerOnesTurn;
+    }
 }

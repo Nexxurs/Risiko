@@ -21,6 +21,8 @@ import java.util.Map;
 
 public class Main extends Application {
 
+    Controller controller;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Pane root = new Pane();
@@ -121,14 +123,22 @@ public class Main extends Application {
         }
         br.close();
 
+        Label status = new Label();
+        status.textProperty().bind(system.statusProperty());
+        status.setLayoutX(400);
+        status.setLayoutY(600);
+        root.getChildren().add(status);
+
         Scene scene = new Scene(root,1300,650);
         primaryStage.setTitle("All those Territories");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        controller = new Controller();
     }
 
     private void mouseClickHandler(MouseEvent me){
-        System.out.println(((Node)me.getSource()).getId());
+        controller.clickedOnNation(((Node)me.getSource()).getId());
     }
 
     public static void main(String[] args) {
