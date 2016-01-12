@@ -196,13 +196,14 @@ public class Main extends Application {
 
     private void mouseClickHandler(MouseEvent me){
         controller.clickedOnNation(((Node)me.getSource()).getId());
-
+        /*
         String source = ((Node)me.getSource()).getId();
 
         DataSystem data = DataSystem.getInstance();
         Nation nation = data.getNations().get(source);
         nation.setOwner(Owner.Player1);
         nation.setTrupps(nation.getTrupps()+1);
+        */
     }
 
     public static void main(String[] args) {
