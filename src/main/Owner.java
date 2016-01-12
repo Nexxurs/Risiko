@@ -1,6 +1,8 @@
 package main;
 
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -12,9 +14,12 @@ public enum Owner {
     Player2(Color.RED),
     Unowned(Color.GRAY);
 
-    Paint color;
+    private Paint color;
     Owner(Paint color){
         this.color=color;
+    }
+    public Paint getColor(){
+        return color;
     }
 
 
