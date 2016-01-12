@@ -27,8 +27,21 @@ public class Nation {
         color = new SimpleObjectProperty<>(owner.getColor());
     }
 
-    public void setNeighbors(String[] neighbors) {
-        this.neighbors = neighbors;
+    public void addNeighbor(String newNeighbor) {
+        if(neighbors==null) {
+            neighbors = new String[]{newNeighbor};
+            return;
+        }
+        String[] newArray = new String[neighbors.length+1];
+        for(int i =0;i<neighbors.length;i++){
+            if(neighbors[i].equals(newNeighbor)){
+                //System.out.println(name+" already has neighbor "+newNeighbor);
+                return;
+            }
+            newArray[i]=neighbors[i];
+        }
+        newArray[neighbors.length]=newNeighbor;
+        neighbors=newArray;
     }
 
     public void setOwner(Owner owner) {

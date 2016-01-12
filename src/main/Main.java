@@ -76,7 +76,6 @@ public class Main extends Application {
                     path.getElements().add(line);
                 }
                 path.fillProperty().bind(nation.getColorProperty());
-                //path.setFill(Owner.Unowned.color);
                 path.setId(nameNoSpace);
                 path.setOnMouseClicked(this::mouseClickHandler);
                 world.getChildren().add(path);
@@ -102,7 +101,6 @@ public class Main extends Application {
 
             } else if (parts[0].equals("neighbors-of")) {
                 Nation nation = Nations.get(nameNoSpace);
-                List<String> neighbors = new ArrayList<>();
                 i++;
                 while (i < parts.length) {
                     String neighbor = "";
@@ -114,10 +112,13 @@ public class Main extends Application {
                     if (!(nameNoSpace.equals("Alaska") || nameNoSpace.equals("Kamchatka"))) {
                         seaConnections.getChildren().add(lineBetweenCapitals(Nations.get(nameNoSpace), Nations.get(neighbor)));
                     }
-                    neighbors.add(neighbor);
+
+                    //Nachbarn werden meist nur in eine Richtung angegeben. --> in beide Richtungen hinzufügen
+                    nation.addNeighbor(neighbor);
+                    Nations.get(neighbor).addNeighbor(nameNoSpace);
+
                     i++; //Aufzählungszeichen überspringen
                 }
-                nation.setNeighbors(neighbors.toArray(new String[neighbors.size()]));
             } else if (parts[0].equals("continent")) {
                 List<String> nations = new ArrayList<>();
                 int addValue = Integer.parseInt(parts[i]);
