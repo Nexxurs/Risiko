@@ -21,8 +21,8 @@ import java.util.Map;
 
 public class Main extends Application {
     private static final int LINEWIDTH=3;
-    private static final int SCREENWIDTH=1300;
-    private static final int SCREENHEIGHT=600;
+    private static final int SCREENWIDTH=1250;
+    private static final int SCREENHEIGHT=650;
     Controller controller;
 
     @Override
@@ -32,7 +32,7 @@ public class Main extends Application {
         Pane seaConnections = new Pane();
         root.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,null,null)));
 
-        FileReader fr = new FileReader("C:/Users/Paul/Dropbox/Informatik/2015-WS-PK/Abschlussbeispiel/world.map");
+        FileReader fr = new FileReader("resources/world.map");
         BufferedReader br = new BufferedReader(fr);
         String zeile;
 
@@ -195,8 +195,9 @@ public class Main extends Application {
         return line;
     }
 
-    private void mouseClickHandler(MouseEvent me){
-        controller.clickedOnNation(((Node)me.getSource()).getId());
+    private void mouseClickHandler(MouseEvent me)
+    {
+        controller.clickedOnNation(((Node) me.getSource()).getId());
         /*
         String source = ((Node)me.getSource()).getId();
 
