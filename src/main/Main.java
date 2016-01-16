@@ -1,9 +1,9 @@
 package main;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -40,7 +40,7 @@ public class Main extends Application {
         Map<String,Nation> Nations = data.getNations();
 
         while( (zeile = br.readLine())!= null){
-            System.out.println(zeile);
+            //System.out.println(zeile);
             String[] parts = zeile.split(" ");
 
             int i = 1;
@@ -146,7 +146,7 @@ public class Main extends Application {
         Label status = new Label();
         status.textProperty().bind(data.statusProperty());
         status.setLayoutX(400);
-        status.setLayoutY(600);
+        status.setLayoutY(SCREENHEIGHT-(status.getHeight()+50));
         root.getChildren().add(status);
 
 
@@ -173,6 +173,14 @@ public class Main extends Application {
         root.getChildren().add(seaConnections);
         root.getChildren().add(world);
 
+
+        Button nextPhase = new Button("Next");
+        nextPhase.setLayoutX(SCREENWIDTH-(nextPhase.getWidth()+70));
+        nextPhase.setLayoutY(SCREENHEIGHT-(nextPhase.getHeight()+50));
+        nextPhase.setOnMouseClicked(this::onNextPhase);
+        root.getChildren().add(nextPhase);
+
+
         Scene scene = new Scene(root,SCREENWIDTH,SCREENHEIGHT);
         primaryStage.setTitle("All those Territories");
         primaryStage.setScene(scene);
@@ -195,17 +203,24 @@ public class Main extends Application {
         return line;
     }
 
-    private void mouseClickHandler(MouseEvent me)
-    {
-        controller.clickedOnNation(((Node) me.getSource()).getId());
-        /*
+    private void mouseClickHandler(MouseEvent me){
+        controller.clickedOnNation(((Node)me.getSource()).getId());
+/*
         String source = ((Node)me.getSource()).getId();
 
         DataSystem data = DataSystem.getInstance();
         Nation nation = data.getNations().get(source);
-        nation.setOwner(Owner.Player1);
+        if(nation.getOwner()==Owner.Player1) {
+            nation.setHighlight(true);
+        } else {
+            nation.setOwner(Owner.Player1);
+        }
         nation.setTrupps(nation.getTrupps()+1);
-        */
+*/
+    }
+
+    private void onNextPhase(MouseEvent me){
+
     }
 
     public static void main(String[] args) {
