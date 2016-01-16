@@ -17,6 +17,7 @@ public class Nation {
     private IntegerProperty truppCounter;
     private int capitalX;
     private int capitalY;
+    private boolean highlighted;
 
 
 
@@ -74,6 +75,19 @@ public class Nation {
     }
     public void setTrupps(int value){
         truppCounter.setValue(value);
+    }
+
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
+    public void setHighlight(boolean highlighted) {
+        this.highlighted = highlighted;
+        if(highlighted){
+            color.setValue(owner.getHighlightColor());
+        } else {
+            color.setValue(owner.getColor());
+        }
     }
 
     public int getCapitalX() {
