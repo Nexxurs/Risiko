@@ -45,6 +45,14 @@ public class Nation {
         neighbors=newArray;
     }
 
+    public boolean isNeighbors(String nation){
+        for (int i = 0; i < neighbors.length; i++)
+        {
+            if(nation.equals(neighbors[i])) return true;
+        }
+        return false;
+    }
+
     public void setOwner(Owner owner) {
         this.owner = owner;
         color.setValue(this.owner.getColor());

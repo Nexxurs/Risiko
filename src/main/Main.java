@@ -220,7 +220,7 @@ public class Main extends Application {
     }
 
     private void onNextPhase(MouseEvent me){
-
+        controller.clickedNext();
     }
 
     public static void main(String[] args) {
