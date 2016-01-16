@@ -1,14 +1,17 @@
 package main;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
@@ -23,7 +26,10 @@ public class Main extends Application {
     private static final int LINEWIDTH=3;
     private static final int SCREENWIDTH=1250;
     private static final int SCREENHEIGHT=650;
+    private VBox troopSelector;
     Controller controller;
+
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -180,6 +186,9 @@ public class Main extends Application {
         nextPhase.setOnMouseClicked(this::onNextPhase);
         root.getChildren().add(nextPhase);
 
+        troopSelector = new VBox();
+        //TODO Hier weiter
+
 
         Scene scene = new Scene(root,SCREENWIDTH,SCREENHEIGHT);
         primaryStage.setTitle("All those Territories");
@@ -203,24 +212,25 @@ public class Main extends Application {
         return line;
     }
 
+    public int truppSelection(String title, int min, int max){
+        return 0;
+    }
+
     private void mouseClickHandler(MouseEvent me){
         controller.clickedOnNation(((Node)me.getSource()).getId());
-/*
-        String source = ((Node)me.getSource()).getId();
 
-        DataSystem data = DataSystem.getInstance();
-        Nation nation = data.getNations().get(source);
-        if(nation.getOwner()==Owner.Player1) {
-            nation.setHighlight(true);
-        } else {
-            nation.setOwner(Owner.Player1);
-        }
-        nation.setTrupps(nation.getTrupps()+1);
-*/
     }
 
     private void onNextPhase(MouseEvent me){
         controller.clickedNext();
+    }
+
+    private void onTroopSelectionOK(ActionEvent ae){
+
+    }
+
+    private void onTroopSelectionCancel(ActionEvent ae){
+
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,5 @@
 package main;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -15,7 +14,6 @@ public class DataSystem {
     private static DataSystem system;
     private Map<String, Nation> nations;
     private Map<String, Continent> continents;
-    private boolean isPlayerOnesTurn = true;
     private StringProperty status;
 
 
@@ -50,11 +48,5 @@ public class DataSystem {
         return continents;
     }
 
-    public boolean isPlayerOnesTurn() {
-        return isPlayerOnesTurn;
-    }
 
-    public void setPlayerOnesTurn(boolean playerOnesTurn) {
-        isPlayerOnesTurn = playerOnesTurn;
-    }
 }

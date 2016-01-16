@@ -1,8 +1,7 @@
 package main;
 
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -18,12 +17,14 @@ public enum Owner {
     private Paint highlightColor;
     private int owendNations;
     private int reinforcment;
+
     Owner(Paint color,Paint hightlight,int owendNations,int reinforcment){
         this.color=color;
         this.highlightColor=hightlight;
         this.owendNations=owendNations;
         this.reinforcment=reinforcment;
     }
+
     public Paint getColor(){
         return color;
     }

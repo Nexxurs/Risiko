@@ -149,7 +149,7 @@ public class Controller {
 
                 }
             }
-            data.statusProperty().setValue("Phase 1: " + nationID);
+            //data.statusProperty().setValue("Phase 1: " + nationID);
             if(phase == 1)
             {
                 Owner.Player1.setReinforcment(getReinforcment(Owner.Player1)+ Owner.Player1.getOwendNations()/3);
