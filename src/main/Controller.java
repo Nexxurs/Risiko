@@ -1,22 +1,26 @@
 package main;
 
+import interfaces.TroopSelectionResult;
+
 import java.util.Arrays;
 
-public class Controller {
+public class Controller implements TroopSelectionResult{
     DataSystem data;
     private int phase;
     private String[] nations;
     private String[] continents;
     private Nation selected = null;
     private Nation capture = null;
+    private Main gui;
 
 
-    public Controller(){
+    public Controller(Main gui){
         data = DataSystem.getInstance();
         phase = 0;
         nations = data.getNations().keySet().toArray(new String[data.getNations().keySet().toArray().length]);
         continents = data.getContinents().keySet().toArray(new String[data.getContinents().keySet().toArray().length]);
-}
+        this.gui = gui;
+    }
 
 
 //        if(phase == 2)
@@ -221,5 +225,11 @@ public class Controller {
     {
         n1.setTrupps(n1.getTrupps()-1);
         n2.setTrupps(n2.getTrupps()+1);
+    }
+
+    @Override
+    public void troopSelectionResult(int value) {
+        //Wird aufgerufen, wenn Truppen ausgewählt wurden, wenn keine Truppen ausgewählt werden, wird min-1 übertragen
+        //TODO implement
     }
 }

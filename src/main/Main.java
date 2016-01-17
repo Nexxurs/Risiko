@@ -6,12 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
@@ -26,13 +24,45 @@ public class Main extends Application {
     private static final int LINEWIDTH=3;
     private static final int SCREENWIDTH=1250;
     private static final int SCREENHEIGHT=650;
-    private VBox troopSelector;
     Controller controller;
-
+    TroopSelector troopSelector;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        Pane root = initWorld();
+        DataSystem data = DataSystem.getInstance();
+
+        Label status = new Label();
+        status.textProperty().bind(data.statusProperty());
+        status.setLayoutX(400);
+        status.setLayoutY(SCREENHEIGHT-(status.getHeight()+50));
+        root.getChildren().add(status);
+
+        Button nextPhase = new Button("Next");
+        nextPhase.setLayoutX(SCREENWIDTH-(nextPhase.getWidth()+70));
+        nextPhase.setLayoutY(SCREENHEIGHT-(nextPhase.getHeight()+50));
+        nextPhase.setOnMouseClicked(this::onNextPhase);
+        root.getChildren().add(nextPhase);
+
+        controller = new Controller(this);
+
+        troopSelector= new TroopSelector(controller);
+        troopSelector.setVisible(false);
+        troopSelector.setLayoutX((SCREENWIDTH-200)/2);
+        troopSelector.setLayoutY((SCREENHEIGHT-100)/2);
+        root.getChildren().add(troopSelector);
+
+        Scene scene = new Scene(root,SCREENWIDTH,SCREENHEIGHT);
+        primaryStage.setTitle("All those Territories");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+
+    }
+
+    private Pane initWorld() throws Exception{
         Pane world = new Pane();
         Pane root = new Pane();
         Pane seaConnections = new Pane();
@@ -149,13 +179,6 @@ public class Main extends Application {
         }
         br.close();
 
-        Label status = new Label();
-        status.textProperty().bind(data.statusProperty());
-        status.setLayoutX(400);
-        status.setLayoutY(SCREENHEIGHT-(status.getHeight()+50));
-        root.getChildren().add(status);
-
-
         //Verbindung zwischen Alaska und Kamchatka
         Line alaskaLine = new Line();
         alaskaLine.setStrokeWidth(LINEWIDTH);
@@ -179,23 +202,7 @@ public class Main extends Application {
         root.getChildren().add(seaConnections);
         root.getChildren().add(world);
 
-
-        Button nextPhase = new Button("Next");
-        nextPhase.setLayoutX(SCREENWIDTH-(nextPhase.getWidth()+70));
-        nextPhase.setLayoutY(SCREENHEIGHT-(nextPhase.getHeight()+50));
-        nextPhase.setOnMouseClicked(this::onNextPhase);
-        root.getChildren().add(nextPhase);
-
-        troopSelector = new VBox();
-        //TODO Hier weiter
-
-
-        Scene scene = new Scene(root,SCREENWIDTH,SCREENHEIGHT);
-        primaryStage.setTitle("All those Territories");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        controller = new Controller();
+        return root;
     }
 
     private Line lineBetweenCapitals(Nation a, Nation b){
@@ -212,26 +219,21 @@ public class Main extends Application {
         return line;
     }
 
-    public int truppSelection(String title, int min, int max){
-        return 0;
+    public void showTruppSelection(String title, int min, int max){
+        troopSelector.setTitle(title);
+        troopSelector.setSliderValues(min, max);
+        troopSelector.setVisible(true);
     }
 
     private void mouseClickHandler(MouseEvent me){
-        controller.clickedOnNation(((Node)me.getSource()).getId());
+        if(!troopSelector.isVisible()) controller.clickedOnNation(((Node)me.getSource()).getId());
 
     }
 
     private void onNextPhase(MouseEvent me){
-        controller.clickedNext();
+        if(!troopSelector.isVisible()) controller.clickedNext();
     }
 
-    private void onTroopSelectionOK(ActionEvent ae){
-
-    }
-
-    private void onTroopSelectionCancel(ActionEvent ae){
-
-    }
 
     public static void main(String[] args) {
         launch(args);
