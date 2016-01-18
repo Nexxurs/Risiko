@@ -1,7 +1,7 @@
 package main;
 
+import interfaces.Gui;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,14 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Main extends Application {
+public class Main extends Application implements Gui {
     private static final int LINEWIDTH=3;
     private static final int SCREENWIDTH=1250;
     private static final int SCREENHEIGHT=650;
-    Controller controller;
-    TroopSelector troopSelector;
+    private Controller controller;
+    private TroopSelector troopSelector;
+    private Endscreen endscreen;
 
-
+    // ----- Produce Stage -----
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -50,9 +51,15 @@ public class Main extends Application {
 
         troopSelector= new TroopSelector(controller);
         troopSelector.setVisible(false);
-        troopSelector.setLayoutX((SCREENWIDTH-200)/2);
-        troopSelector.setLayoutY((SCREENHEIGHT-100)/2);
+        troopSelector.setLayoutX((SCREENWIDTH-troopSelector.getPrefWidth())/2);
+        troopSelector.setLayoutY((SCREENHEIGHT-troopSelector.getPrefHeight())/2);
         root.getChildren().add(troopSelector);
+
+        endscreen = new Endscreen(SCREENWIDTH, 150);
+        endscreen.setLayoutY((SCREENHEIGHT-150)/2);
+        endscreen.setVisible(false);
+        root.getChildren().add(endscreen);
+
 
         Scene scene = new Scene(root,SCREENWIDTH,SCREENHEIGHT);
         primaryStage.setTitle("All those Territories");
@@ -219,21 +226,36 @@ public class Main extends Application {
         return line;
     }
 
+    // ------ Public Methods ------
+
     public void showTruppSelection(String title, int min, int max){
         troopSelector.setTitle(title);
         troopSelector.setSliderValues(min, max);
         troopSelector.setVisible(true);
     }
 
+    public void showEndScreen(boolean Player1Win){
+        endscreen.setText("Player 1",Player1Win);
+        endscreen.setVisible(true);
+    }
+
+    // ------ Private Methods
+
     private void mouseClickHandler(MouseEvent me){
-        if(!troopSelector.isVisible()) controller.clickedOnNation(((Node)me.getSource()).getId());
+        if(worldResponsive()) controller.clickedOnNation(((Node)me.getSource()).getId());
 
     }
 
     private void onNextPhase(MouseEvent me){
-        if(!troopSelector.isVisible()) controller.clickedNext();
+        if(worldResponsive()) controller.clickedNext();
     }
 
+    private boolean worldResponsive(){
+        if(!troopSelector.isVisible() && !endscreen.isVisible()) return true;
+        else return false;
+    }
+
+    // ----- main Method -----
 
     public static void main(String[] args) {
         launch(args);

@@ -1,5 +1,6 @@
 package main;
 
+import interfaces.Gui;
 import interfaces.TroopSelectionResult;
 
 import java.util.Arrays;
@@ -11,10 +12,10 @@ public class Controller implements TroopSelectionResult{
     private String[] continents;
     private Nation selected = null;
     private Nation capture = null;
-    private Main gui;
+    private Gui gui;
 
 
-    public Controller(Main gui){
+    public Controller(Gui gui){
         data = DataSystem.getInstance();
         phase = 0;
         nations = data.getNations().keySet().toArray(new String[data.getNations().keySet().toArray().length]);
@@ -229,7 +230,7 @@ public class Controller implements TroopSelectionResult{
 
     @Override
     public void troopSelectionResult(int value) {
-        //Wird aufgerufen, wenn Truppen ausgewählt wurden, wenn keine Truppen ausgewählt werden, wird min-1 übertragen
+        //Wird aufgerufen, wenn Truppen ausgewählt wurden, wenn keine Truppen ausgewählt werden, wird -1 übertragen
         //TODO implement
     }
 }

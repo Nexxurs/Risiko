@@ -14,24 +14,34 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Created by Paul on 17.01.2016.
  */
 public class TroopSelector extends VBox {
 
-    Label label;
-    Slider slider;
-    TroopSelectionResult result;
+    private Label label;
+    private Slider slider;
+    private TroopSelectionResult result;
+    private double prefHeight = 170;
+    private double prefWidth = 220;
 
     public TroopSelector(TroopSelectionResult result){
         super();
         this.result = result;
 
+        this.setAlignment(Pos.CENTER);
         this.setBackground(new Background(new BackgroundFill(Color.WHITE,null,null)));
         this.setStyle("-fx-border-width: 1; -fx-border-style: solid; -fx-border-color: black");
+        this.setPrefSize(prefWidth,prefHeight);
 
         label = new Label("Select Number of Troops");
+        label.setFont(Font.font(15));
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setPrefSize(prefWidth-20,80);
+        label.setWrapText(true);
         this.getChildren().add(label);
         slider = new Slider(1,3,1);
         slider.setShowTickLabels(true);
@@ -55,6 +65,7 @@ public class TroopSelector extends VBox {
         buttonBox.getChildren().add(sep);
         buttonBox.getChildren().add(cancel);
         this.getChildren().add(buttonBox);
+
     }
 
     private void onOK(ActionEvent ae){

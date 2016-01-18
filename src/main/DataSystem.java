@@ -2,7 +2,6 @@ package main;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,10 +32,6 @@ public class DataSystem {
     public Map<String, Nation> getNations() {
         if(nations==null) nations = new HashMap<>();
         return nations;
-    }
-
-    public String getStatus() {
-        return status.get();
     }
 
     public StringProperty statusProperty() {
