@@ -12,6 +12,8 @@ public class Controller implements TroopSelectionResult{
     private String[] continents;
     private Nation selected = null;
     private Nation capture = null;
+    private Nation[] move = null;
+    private boolean attack = false;
     private Gui gui;
 
 
@@ -23,17 +25,6 @@ public class Controller implements TroopSelectionResult{
         this.gui = gui;
     }
 
-
-//        if(phase == 2)
-//        {
-//            //Verstärkung verteilen
-//            //player1.verstärkung
-//            //player2.verstärkung
-//
-//            //Angriff, Bewegung
-//            //player1.angriff loop
-//            //player2.angriff loop
-//        }
 
 
     private static int dice()
@@ -55,6 +46,7 @@ public class Controller implements TroopSelectionResult{
         if(phase == 2)
         {
             selected.setHighlight(false);
+            move = null;
             //Computer attack
             Owner.Player1.setReinforcment(getReinforcment(Owner.Player1)+ Owner.Player1.getOwendNations()/3);
             Owner.Player2.setReinforcment(getReinforcment(Owner.Player2)+ Owner.Player2.getOwendNations()/3);
@@ -63,51 +55,26 @@ public class Controller implements TroopSelectionResult{
         }
     }
 
-    public void clickedOnNation(String nationID){
+    public void leftClickedOnNation(String nationID){
         System.out.println(nationID);
         if (phase > 0)
         {
-            if(phase == 1)
+            if(phase == 1) //reinforcments placed
             {
                 if (data.getNations().get(nationID).getOwner() == Owner.Player1)
                 {
                     selected.setHighlight(false);
                     selected = data.getNations().get(nationID);
                     selected.setHighlight(true);
-                    selected.setTrupps(selected.getTrupps()+1);
-                    Owner.Player1.decReinforcment(1);
-                    data.statusProperty().setValue("Added 1 army to " + nationID +"\n"+ "reinforcments left: " + Owner.Player1.getReinforcment());
-                }
-                if (Owner.Player1.getReinforcment() == 0)
-                {
-                    //computer
-                    Nation cur;
-                    for (String nation:nations)
-                    {
-                        cur = data.getNations().get(nation);
-                        if (cur.getOwner() == Owner.Player2)
-                        {
-                            cur.setTrupps(cur.getTrupps()+Owner.Player2.getReinforcment());
-                            Owner.Player2.decReinforcment(Owner.Player2.getReinforcment());
-                            break;
-                        }
-                    }
-                    phase = 2;
+                    gui.showTruppSelection("send reinforcement to" + nationID,1,Owner.Player1.getReinforcment());
+
                 }
             }
-//            if(phase == 3)
-//            {
-//                if(nationID.equals(capture.getName()))
-//                {
-//                    if(selected.getTrupps()>1) move(selected,capture);
-//                }else if(nationID.equals(selected.getName()))
-//                {
-//                    if(capture.getTrupps()> 1) move(capture, selected);
-//                }else phase = 2;
-//            }
-            if(phase == 2)
+
+            if(phase == 2)  // attack / select Nation
             {
-                data.statusProperty().setValue("Phase 2: " + nationID);
+
+                //data.statusProperty().setValue("Phase 2: " + nationID);
                 if (data.getNations().get(nationID).getOwner() == Owner.Player1)
                 {
                     selected.setHighlight(false);
@@ -115,14 +82,17 @@ public class Controller implements TroopSelectionResult{
                     selected.setHighlight(true);
                     data.statusProperty().setValue("Selected " + nationID);
                 }
-                if (selected != null && data.getNations().get(nationID).getOwner() == Owner.Player2 && selected.isNeighbors(nationID))
+                if (selected != null && selected.getTrupps() > 1 && data.getNations().get(nationID).getOwner() == Owner.Player2 && selected.isNeighbors(nationID))
                 {
+                    attack = true;
                     capture = attack(selected, data.getNations().get(nationID));
-//                  if(capture != null) phase = 3;
+                    if(selected.getOwner().getOwendNations() == nations.length) gui.showEndScreen(true);
+                    else if(capture != null && selected.getTrupps() > 1) gui.showTruppSelection("send reinforcments from " + selected.getName() +  " to " + nationID,1,selected.getTrupps()-1);
+
                 }
             }
         }
-        if(phase == 0)
+        if(phase == 0) // claim nations
         {
             selected = data.getNations().get(nationID);
             if (selected.getOwner() == Owner.Unowned)
@@ -163,6 +133,30 @@ public class Controller implements TroopSelectionResult{
             }
         }
 
+    }
+
+    public void rightClickedOnNation(String nationID){
+        if(phase == 2)
+        {
+            Nation cur = data.getNations().get(nationID);
+            if(selected.getOwner() == cur.getOwner() && selected.isNeighbors(nationID))
+            {
+                if(move == null)
+                {
+                    move = new Nation[2];
+                    move[0] = selected;
+                    move[1] = cur;
+                }
+                if(selected.getTrupps() > 1 && ((selected == move[0] && cur == move[1]) || (selected == move[1] && cur == move[0])))
+                {
+                    attack = false;
+                    gui.showTruppSelection("move reinforcment from " + selected.getName() + " to " + nationID, 1, selected.getTrupps()-1);
+                }else
+                {
+                    data.statusProperty().setValue("already send trupps from " + move[0].getName() + " to " + move[1].getName());
+                }
+            }
+        }
     }
 
     private void claim(Nation nation,Owner p)
@@ -222,15 +216,55 @@ public class Controller implements TroopSelectionResult{
         return null;
     }
 
-    private void move(Nation n1, Nation n2)
+    private void moveTrupps(Nation n1, Nation n2,int amount)
     {
-        n1.setTrupps(n1.getTrupps()-1);
-        n2.setTrupps(n2.getTrupps()+1);
+        n1.setTrupps(n1.getTrupps()-amount);
+        n2.setTrupps(n2.getTrupps()+amount);
     }
 
     @Override
-    public void troopSelectionResult(int value) {
+    public void troopSelectionResult(int value)
+    {
         //Wird aufgerufen, wenn Truppen ausgewählt wurden, wenn keine Truppen ausgewählt werden, wird -1 übertragen
-        //TODO implement
+        if (value > 0)
+        {
+            if (phase == 1)
+            {
+                selected.setTrupps(selected.getTrupps() + value);
+                Owner.Player1.decReinforcment(value);
+                data.statusProperty().setValue("Added " + value + " army to " + selected.getName() + "\n" + "reinforcments left: " + Owner.Player1.getReinforcment());
+                if (Owner.Player1.getReinforcment() == 0)
+                {
+                    //computer
+                    Nation cur;
+                    for (String nation : nations)
+                    {
+                        cur = data.getNations().get(nation);
+                        if (cur.getOwner() == Owner.Player2)
+                        {
+                            cur.setTrupps(cur.getTrupps() + Owner.Player2.getReinforcment());
+                            Owner.Player2.decReinforcment(Owner.Player2.getReinforcment());
+                            break;
+                        }
+                    }
+                    phase = 2;
+                }
+            } else
+            {
+                if (attack)
+                {
+
+                    moveTrupps(selected, capture, value);
+
+                } else
+                {
+                    if(selected == move[0]) moveTrupps(move[0], move[1], value);
+                    else moveTrupps(move[1], move[0], value);
+                    phase = 2;
+                }
+
+            }
+        }
+
     }
 }

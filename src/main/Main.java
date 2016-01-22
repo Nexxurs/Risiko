@@ -242,7 +242,10 @@ public class Main extends Application implements Gui {
     // ------ Private Methods
 
     private void mouseClickHandler(MouseEvent me){
-        if(worldResponsive()) controller.clickedOnNation(((Node)me.getSource()).getId());
+        if(worldResponsive())  {
+            if(me.getButton().toString().equals("PRIMARY")) controller.leftClickedOnNation(((Node)me.getSource()).getId());
+            if(me.getButton().toString().equals("SECONDARY")) controller.rightClickedOnNation(((Node)me.getSource()).getId());
+        }
 
     }
 

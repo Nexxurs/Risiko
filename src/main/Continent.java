@@ -3,7 +3,7 @@ package main;
 /**
  * Created by Paul on 07.01.2016.
  */
-public class Continent {
+public class Continent{
     private String name;
     private int addValue;
     private String[] nations;
