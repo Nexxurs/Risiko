@@ -62,7 +62,7 @@ public class Nation {
         return color;
     }
 
-    public String getName() {
+    public String toString() {
         return name;
     }
 

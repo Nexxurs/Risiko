@@ -11,7 +11,7 @@ public class Controller implements TroopSelectionResult{
     private String[] nations;
     private String[] continents;
     private Nation selected = null;
-    private Nation capture = null;
+    private Nation[] capture = null;
     private Nation[] move = null;
     private boolean attack = false;
     private Gui gui;
@@ -32,13 +32,19 @@ public class Controller implements TroopSelectionResult{
         return (int)(Math.random()*6)+1;
     }
 
-    public static void rollDice(int[] rolls)
+    public static String rollDice(int[] rolls)
     {
         for (int i = 0; i < rolls.length; i++)
         {
             rolls[i] = dice();
         }
         Arrays.sort(rolls);
+        String result = "";
+        for (int i = 0; i < rolls.length; i++)
+        {
+            result += rolls[i] + " ";
+        }
+        return result;
     }
 
     public void clickedNext()
@@ -47,6 +53,7 @@ public class Controller implements TroopSelectionResult{
         {
             selected.setHighlight(false);
             move = null;
+            capture = null;
             //Computer attack
             Owner.Player1.setReinforcment(getReinforcment(Owner.Player1)+ Owner.Player1.getOwendNations()/3);
             Owner.Player2.setReinforcment(getReinforcment(Owner.Player2)+ Owner.Player2.getOwendNations()/3);
@@ -66,14 +73,18 @@ public class Controller implements TroopSelectionResult{
                     selected.setHighlight(false);
                     selected = data.getNations().get(nationID);
                     selected.setHighlight(true);
-                    gui.showTruppSelection("send reinforcement to" + nationID,1,Owner.Player1.getReinforcment());
-
+                    if(Owner.Player1.getReinforcment() > 1) gui.showTruppSelection("send reinforcement to" + nationID,1,Owner.Player1.getReinforcment());
+                    else
+                    {
+                        selected.setTrupps(selected.getTrupps() + 1);
+                        Owner.Player1.decReinforcment(1);
+                        data.statusProperty().setValue("Added " + 1 + " army to " + selected + "\n" + "reinforcments left: " + Owner.Player1.getReinforcment());
+                        placTruppsCom();
+                    }
                 }
             }
-
-            if(phase == 2)  // attack / select Nation
+            else if(phase == 2)  // attack / select Nation
             {
-
                 //data.statusProperty().setValue("Phase 2: " + nationID);
                 if (data.getNations().get(nationID).getOwner() == Owner.Player1)
                 {
@@ -87,8 +98,6 @@ public class Controller implements TroopSelectionResult{
                     attack = true;
                     capture = attack(selected, data.getNations().get(nationID));
                     if(selected.getOwner().getOwendNations() == nations.length) gui.showEndScreen(true);
-                    else if(capture != null && selected.getTrupps() > 1) gui.showTruppSelection("send reinforcments from " + selected.getName() +  " to " + nationID,1,selected.getTrupps()-1);
-
                 }
             }
         }
@@ -141,19 +150,32 @@ public class Controller implements TroopSelectionResult{
             Nation cur = data.getNations().get(nationID);
             if(selected.getOwner() == cur.getOwner() && selected.isNeighbors(nationID))
             {
-                if(move == null)
+                if(capture != null && ((selected == capture[0] && cur == capture[1]) || (selected == capture[1] && cur == capture[0])))
                 {
-                    move = new Nation[2];
-                    move[0] = selected;
-                    move[1] = cur;
+                    attack = true;
+                    if(selected.getTrupps() > 2)gui.showTruppSelection("send reinforcments from " + selected +  " to " + nationID ,1,selected.getTrupps()-1);
+                    else if(selected.getTrupps() == 2) moveTrupps(capture[0], capture[1], 1);
+                    else data.statusProperty().setValue("Not enough trupps to move");
                 }
-                if(selected.getTrupps() > 1 && ((selected == move[0] && cur == move[1]) || (selected == move[1] && cur == move[0])))
+                else
                 {
-                    attack = false;
-                    gui.showTruppSelection("move reinforcment from " + selected.getName() + " to " + nationID, 1, selected.getTrupps()-1);
-                }else
-                {
-                    data.statusProperty().setValue("already send trupps from " + move[0].getName() + " to " + move[1].getName());
+                    if (move == null)
+                    {
+                        move = new Nation[2];
+                        move[0] = selected;
+                        move[1] = cur;
+                    }
+                    if ((selected == move[0] && cur == move[1]) || (selected == move[1] && cur == move[0]))
+                    {
+                        attack = false;
+                        if(selected.getTrupps() > 2) gui.showTruppSelection("move trupps from " + selected + " to " + nationID, 1, selected.getTrupps() - 1);
+                        else if(selected.getTrupps() == 2) moveTrupps(move[0], move[1], 1);
+                        else data.statusProperty().setValue("Not enough trupps to move");
+
+                    } else
+                    {
+                        data.statusProperty().setValue("already send trupps from " + move[0] + " to " + move[1]);
+                    }
                 }
             }
         }
@@ -189,21 +211,24 @@ public class Controller implements TroopSelectionResult{
         return reinforcment;
     }
 
-    private Nation attack(Nation selected, Nation enemy)
+    private Nation[] attack(Nation selected, Nation enemy)
     {
         int[] attack;
         int[] defend;
+        String status = "Attacked " + enemy + " from " + selected + "\n";
         if(selected.getTrupps()> 3) attack = new int[3];
         else attack = new int[selected.getTrupps()-1];
         if(enemy.getTrupps()>= 2) defend = new int[2];
         else defend = new int[1];
-        Controller.rollDice(attack);
-        Controller.rollDice(defend);
+        status += "Attackdice: ";
+        status += Controller.rollDice(attack) + " Defenddice: ";
+        status += Controller.rollDice(defend);
         for (int i = 0; (i < attack.length)&&(i<defend.length); i++)
         {
             if(attack[attack.length-1-i]>defend[defend.length-1-i]) enemy.setTrupps(enemy.getTrupps()-1);
             else selected.setTrupps(selected.getTrupps()-1);
         }
+
         if(enemy.getTrupps() == 0)
         {
             enemy.getOwner().decOwendNations();
@@ -211,15 +236,42 @@ public class Controller implements TroopSelectionResult{
             enemy.setTrupps(1);
             selected.getOwner().addOwendNations();
             selected.setTrupps(selected.getTrupps()-1);
-            return enemy;
+
+            data.statusProperty().setValue(status + "\n" + "Player1 captured " + enemy);
+            return new Nation[]{selected,enemy};
         }
+        data.statusProperty().setValue(status);
         return null;
     }
 
     private void moveTrupps(Nation n1, Nation n2,int amount)
     {
-        n1.setTrupps(n1.getTrupps()-amount);
-        n2.setTrupps(n2.getTrupps()+amount);
+        if(selected == n1)
+        {
+            n1.setTrupps(n1.getTrupps()-amount);
+            n2.setTrupps(n2.getTrupps()+amount);
+        }
+        else
+        {
+            n1.setTrupps(n1.getTrupps()+amount);
+            n2.setTrupps(n2.getTrupps()-amount);
+        }
+    }
+
+    private void placTruppsCom()
+    {
+        Nation cur;
+        for (String nation : nations)
+        {
+            cur = data.getNations().get(nation);
+            if (cur.getOwner() == Owner.Player2)
+            {
+                cur.setTrupps(cur.getTrupps() + Owner.Player2.getReinforcment());
+                Owner.Player2.decReinforcment(Owner.Player2.getReinforcment());
+                break;
+            }
+        }
+        phase = 2;
     }
 
     @Override
@@ -232,35 +284,20 @@ public class Controller implements TroopSelectionResult{
             {
                 selected.setTrupps(selected.getTrupps() + value);
                 Owner.Player1.decReinforcment(value);
-                data.statusProperty().setValue("Added " + value + " army to " + selected.getName() + "\n" + "reinforcments left: " + Owner.Player1.getReinforcment());
+                data.statusProperty().setValue("Added " + value + " army to " + selected + "\n" + "reinforcments left: " + Owner.Player1.getReinforcment());
                 if (Owner.Player1.getReinforcment() == 0)
                 {
-                    //computer
-                    Nation cur;
-                    for (String nation : nations)
-                    {
-                        cur = data.getNations().get(nation);
-                        if (cur.getOwner() == Owner.Player2)
-                        {
-                            cur.setTrupps(cur.getTrupps() + Owner.Player2.getReinforcment());
-                            Owner.Player2.decReinforcment(Owner.Player2.getReinforcment());
-                            break;
-                        }
-                    }
-                    phase = 2;
+                    placTruppsCom();
                 }
             } else
             {
                 if (attack)
                 {
-
-                    moveTrupps(selected, capture, value);
+                    moveTrupps(capture[0], capture[1], value);
 
                 } else
                 {
-                    if(selected == move[0]) moveTrupps(move[0], move[1], value);
-                    else moveTrupps(move[1], move[0], value);
-                    phase = 2;
+                    moveTrupps(move[0], move[1], value);
                 }
 
             }
