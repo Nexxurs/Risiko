@@ -1,20 +1,31 @@
 package interfaces;
 
+import main.Owner;
+
 /**
  * Created by Paul on 23.01.2016.
  */
-public interface NPC {
+public abstract class NPC {
+    protected Owner owner;
+
+    public NPC(Owner owner) {
+        this.owner = owner;
+    }
+    public Owner getOwner(){
+        return owner;
+    }
     /**
      * Phase 0
      */
-    void claimNation();
+    public abstract void claimNation();
     /**
      * Phase 1
      */
-    void placeReinforcements();
-
+    public abstract void placeReinforcements();
     /**
      * Phase 2
      */
-    void attackNation();
+    public abstract void attackNation();
+
 }
+

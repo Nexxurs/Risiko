@@ -45,6 +45,12 @@ public class DataSystem {
         return continents;
     }
 
+    public void claimNation(Nation nation, Owner owner){
+        nation.setOwner(owner);
+        nation.setTrupps(1);
+        owner.addOwendNations();
+    }
+
     /**
      *
      * @param attacker
@@ -62,10 +68,9 @@ public class DataSystem {
         else attack = new int[attacker.getTrupps()-1];
         if(defender.getTrupps()>= 2) defend = new int[2];
         else defend = new int[1];
-        status += "Attackdice: ";
-        status += rollDice(attack) + " Defenddice: ";
+        status += "Attackers dice: ";
+        status += rollDice(attack) + " Defenders dice: ";
         status += rollDice(defend);
-        System.out.println(status);
         for (int i = 0; (i < attack.length)&&(i<defend.length); i++)
         {
             if(attack[attack.length-1-i]>defend[defend.length-1-i]) defender.setTrupps(defender.getTrupps()-1);
@@ -78,7 +83,7 @@ public class DataSystem {
             defender.setTrupps(1);
             attacker.getOwner().addOwendNations();
             attacker.setTrupps(attacker.getTrupps()-1);
-            if(player) statusProperty().setValue(status + "\n" + "Player 1 captured " + defender);
+            if(player) statusProperty().setValue(status + "\n"+ "Player 1 captured " + defender);
             return true;
         }
         return false;

@@ -8,8 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by Paul on 23.01.2016.
  */
-public class RandomNPC implements NPC{
-    private Owner owner;
+public class RandomNPC extends NPC{
     private DataSystem data = DataSystem.getInstance();
     private String[] nations = data.getNations().keySet().toArray(new String[data.getNations().keySet().toArray().length]);
 
@@ -18,7 +17,7 @@ public class RandomNPC implements NPC{
      * @param owner Select which Player should be played as NPC
      */
     public RandomNPC(Owner owner){
-        this.owner=owner;
+        super(owner);
     }
 
     @Override
@@ -37,6 +36,7 @@ public class RandomNPC implements NPC{
 
     @Override
     public void placeReinforcements() {
+        System.out.println(owner.getReinforcment());
         shuffleArray(nations);
         Random rnd = ThreadLocalRandom.current();
         while(owner.getReinforcment()>0){
@@ -78,7 +78,6 @@ public class RandomNPC implements NPC{
         }
     }
 
-    public Owner getOwner(){ return this.owner;}
 
     private void shuffleArray(String[] array)
     {

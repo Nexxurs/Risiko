@@ -1,6 +1,7 @@
 package main;
 
 import interfaces.Gui;
+import interfaces.NPC;
 import interfaces.TroopSelectionResult;
 
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public class Controller implements TroopSelectionResult{
     private Nation[] capture = null;
     private Nation[] move = null;
     private boolean attack = false;
-    private RandomNPC computer;
+    private NPC computer;
     private Gui gui;
 
 
@@ -45,7 +46,7 @@ public class Controller implements TroopSelectionResult{
     }
 
     public void leftClickedOnNation(String nationID){
-        System.out.println(nationID);
+        //System.out.println(nationID);
         if (phase > 0)
         {
             if(phase == 1) //reinforcments placed
@@ -90,7 +91,7 @@ public class Controller implements TroopSelectionResult{
             if (selected.getOwner() == Owner.Unowned)
             {
                 //player 1
-                claim(selected,Owner.Player1);
+                data.claimNation(selected,Owner.Player1);
                 data.statusProperty().setValue("Claimed "+ nationID);
                 //Computer
                 computer.claimNation();
@@ -153,14 +154,14 @@ public class Controller implements TroopSelectionResult{
             }
         }
     }
-
+/*
     private void claim(Nation nation,Owner p)
     {
         nation.setOwner(p);
         nation.setTrupps(1);
         p.addOwendNations();
     }
-
+*/
     private int getReinforcment(Owner o)
     {
         int reinforcment = 0;
