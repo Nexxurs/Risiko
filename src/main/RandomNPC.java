@@ -78,6 +78,8 @@ public class RandomNPC implements NPC{
         }
     }
 
+    public Owner getOwner(){ return this.owner;}
+
     private void shuffleArray(String[] array)
     {
         Random rnd = ThreadLocalRandom.current();

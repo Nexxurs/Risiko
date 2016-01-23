@@ -36,6 +36,7 @@ public class Controller implements TroopSelectionResult{
             capture = null;
             //Computer attack
             computer.attackNation();
+            if(computer.getOwner().getOwendNations() == nations.length) gui.showEndScreen(false);
             Owner.Player1.setReinforcment(getReinforcment(Owner.Player1)+ Owner.Player1.getOwendNations()/3);
             Owner.Player2.setReinforcment(getReinforcment(Owner.Player2)+ Owner.Player2.getOwendNations()/3);
             phase = 1;
