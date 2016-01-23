@@ -49,19 +49,23 @@ public class DataSystem {
      *
      * @param attacker
      * @param defender
+     * @param player true if a player attacks
      * @return true, if the attack was succesfull and no defending troops are remaining.
      * else, false (even if the attack was a success, but there are defending troops left)
      */
-    public boolean attackNation(Nation attacker, Nation defender)
+    public boolean attackNation(Nation attacker, Nation defender,boolean player)
     {
         int[] attack;
         int[] defend;
+        String status = "Attacked " + defender + " from " + attacker + "\n";
         if(attacker.getTrupps()> 3) attack = new int[3];
         else attack = new int[attacker.getTrupps()-1];
         if(defender.getTrupps()>= 2) defend = new int[2];
         else defend = new int[1];
-        rollDice(attack);
-        rollDice(defend);
+        status += "Attackdice: ";
+        status += rollDice(attack) + " Defenddice: ";
+        status += rollDice(defend);
+        System.out.println(status);
         for (int i = 0; (i < attack.length)&&(i<defend.length); i++)
         {
             if(attack[attack.length-1-i]>defend[defend.length-1-i]) defender.setTrupps(defender.getTrupps()-1);
@@ -74,18 +78,25 @@ public class DataSystem {
             defender.setTrupps(1);
             attacker.getOwner().addOwendNations();
             attacker.setTrupps(attacker.getTrupps()-1);
+            if(player) statusProperty().setValue(status + "\n" + "Player 1 captured " + defender);
             return true;
         }
         return false;
     }
 
-    public static void rollDice(int[] rolls)
+    public static String rollDice(int[] rolls)
     {
         for (int i = 0; i < rolls.length; i++)
         {
             rolls[i] = (int)((Math.random()*6)+1);
         }
         Arrays.sort(rolls);
+        String result = "";
+        for (int i = 0; i < rolls.length; i++)
+        {
+            result += rolls[i] + " ";
+        }
+        return result;
     }
 
 }

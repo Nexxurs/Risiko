@@ -36,7 +36,7 @@ public class RandomNPC implements NPC{
     }
 
     @Override
-    public void placeReinforcementsAndAttack() {
+    public void placeReinforcements() {
         shuffleArray(nations);
         Random rnd = ThreadLocalRandom.current();
         while(owner.getReinforcment()>0){
@@ -46,11 +46,18 @@ public class RandomNPC implements NPC{
                     int rndNr = rnd.nextInt(owner.getReinforcment())+1;
                     currNation.setTrupps(currNation.getTrupps()+rndNr);
                     owner.decReinforcment(rndNr);
+                    if(owner.getReinforcment() <= 0) break;
                 }
             }
         }
-        //Attack!
-        for(String nation : nations){
+    }
+
+    @Override
+    public void attackNation()
+    {
+        Random rnd = ThreadLocalRandom.current();
+        for(String nation : nations)
+        {
             Nation currNation = data.getNations().get(nation);
             if(currNation.getOwner().equals(owner) && currNation.getTrupps()>=2){
                 for(String neighbor : currNation.getNeighbors()){
@@ -58,13 +65,13 @@ public class RandomNPC implements NPC{
                     if(rndNr<=2){
                         Nation currNeighbor = data.getNations().get(neighbor);
                         if(!currNeighbor.getOwner().equals(owner)){
-                            while(currNation.getTrupps()<1){
-                                if(data.attackNation(currNation,currNeighbor)){
+                            while(currNation.getTrupps()>1){
+                                if(data.attackNation(currNation,currNeighbor,false)){
                                     break;
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
             }

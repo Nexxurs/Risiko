@@ -9,7 +9,12 @@ public interface NPC {
      */
     void claimNation();
     /**
-     * Phase 1+2
+     * Phase 1
      */
-    void placeReinforcementsAndAttack();
+    void placeReinforcements();
+
+    /**
+     * Phase 2
+     */
+    void attackNation();
 }
