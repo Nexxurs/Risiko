@@ -2,6 +2,8 @@ package main;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,5 +45,47 @@ public class DataSystem {
         return continents;
     }
 
+    /**
+     *
+     * @param attacker
+     * @param defender
+     * @return true, if the attack was succesfull and no defending troops are remaining.
+     * else, false (even if the attack was a success, but there are defending troops left)
+     */
+    public boolean attackNation(Nation attacker, Nation defender)
+    {
+        int[] attack;
+        int[] defend;
+        if(attacker.getTrupps()> 3) attack = new int[3];
+        else attack = new int[attacker.getTrupps()-1];
+        if(defender.getTrupps()>= 2) defend = new int[2];
+        else defend = new int[1];
+        rollDice(attack);
+        rollDice(defend);
+        for (int i = 0; (i < attack.length)&&(i<defend.length); i++)
+        {
+            if(attack[attack.length-1-i]>defend[defend.length-1-i]) defender.setTrupps(defender.getTrupps()-1);
+            else attacker.setTrupps(attacker.getTrupps()-1);
+        }
+        if(defender.getTrupps() == 0)
+        {
+            defender.getOwner().decOwendNations();
+            defender.setOwner(attacker.getOwner());
+            defender.setTrupps(1);
+            attacker.getOwner().addOwendNations();
+            attacker.setTrupps(attacker.getTrupps()-1);
+            return true;
+        }
+        return false;
+    }
+
+    public static void rollDice(int[] rolls)
+    {
+        for (int i = 0; i < rolls.length; i++)
+        {
+            rolls[i] = (int)((Math.random()*6)+1);
+        }
+        Arrays.sort(rolls);
+    }
 
 }

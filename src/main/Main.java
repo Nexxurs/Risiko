@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Main extends Application implements Gui {
+    private static String mapFile;
     private static final int LINEWIDTH=3;
     private static final int SCREENWIDTH=1250;
     private static final int SCREENHEIGHT=650;
@@ -74,8 +75,8 @@ public class Main extends Application implements Gui {
         Pane root = new Pane();
         Pane seaConnections = new Pane();
         root.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,null,null)));
-
-        FileReader fr = new FileReader("resources/world.map");
+        if(mapFile==null)mapFile="resources/world.map";
+        FileReader fr = new FileReader(mapFile);
         BufferedReader br = new BufferedReader(fr);
         String zeile;
 
@@ -190,20 +191,26 @@ public class Main extends Application implements Gui {
         Line alaskaLine = new Line();
         alaskaLine.setStrokeWidth(LINEWIDTH);
         Nation alaska = Nations.get("Alaska");
-        alaskaLine.setStartY(alaska.getCapitalY());
-        alaskaLine.setStartX(alaska.getCapitalX());
-        alaskaLine.setEndX(0);
-        alaskaLine.setEndY(alaska.getCapitalY());
-        seaConnections.getChildren().add(alaskaLine);
+        if(alaska!=null){
+            alaskaLine.setStartY(alaska.getCapitalY());
+            alaskaLine.setStartX(alaska.getCapitalX());
+            alaskaLine.setEndX(0);
+            alaskaLine.setEndY(alaska.getCapitalY());
+            seaConnections.getChildren().add(alaskaLine);
+        }
+
 
         Line kamchatkaLine = new Line();
         kamchatkaLine.setStrokeWidth(LINEWIDTH);
         Nation kamchatka = Nations.get("Kamchatka");
-        kamchatkaLine.setStartX(kamchatka.getCapitalX());
-        kamchatkaLine.setStartY(kamchatka.getCapitalY());
-        kamchatkaLine.setEndX(SCREENWIDTH);
-        kamchatkaLine.setEndY(kamchatka.getCapitalY());
-        seaConnections.getChildren().add(kamchatkaLine);
+        if(kamchatka!=null){
+            kamchatkaLine.setStartX(kamchatka.getCapitalX());
+            kamchatkaLine.setStartY(kamchatka.getCapitalY());
+            kamchatkaLine.setEndX(SCREENWIDTH);
+            kamchatkaLine.setEndY(kamchatka.getCapitalY());
+            seaConnections.getChildren().add(kamchatkaLine);
+        }
+
 
 
         root.getChildren().add(seaConnections);
@@ -232,6 +239,7 @@ public class Main extends Application implements Gui {
         troopSelector.setTitle(title);
         troopSelector.setSliderValues(min, max);
         troopSelector.setVisible(true);
+        troopSelector.requestFocus();
     }
 
     public void showEndScreen(boolean Player1Win){
@@ -261,6 +269,10 @@ public class Main extends Application implements Gui {
     // ----- main Method -----
 
     public static void main(String[] args) {
+        if(args.length>0) {
+            mapFile=args[0];
+            //System.out.println(mapFile);
+        }
         launch(args);
     }
 }

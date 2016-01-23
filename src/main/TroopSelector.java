@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -32,6 +33,8 @@ public class TroopSelector extends VBox {
         super();
         this.result = result;
 
+
+
         this.setAlignment(Pos.CENTER);
         this.setBackground(new Background(new BackgroundFill(Color.WHITE,null,null)));
         this.setStyle("-fx-border-width: 1; -fx-border-style: solid; -fx-border-color: black");
@@ -50,6 +53,11 @@ public class TroopSelector extends VBox {
         slider.setMinorTickCount(0);
         slider.setBlockIncrement(1);
         slider.setSnapToTicks(true);
+        slider.setOnKeyPressed(event -> {
+            if(event.getCode()== KeyCode.ENTER) ok();
+            else if(event.getCode()==KeyCode.ESCAPE) cancel();
+        });
+
         this.getChildren().add(slider);
 
         HBox buttonBox = new HBox();
@@ -65,14 +73,25 @@ public class TroopSelector extends VBox {
         buttonBox.getChildren().add(sep);
         buttonBox.getChildren().add(cancel);
         this.getChildren().add(buttonBox);
+    }
 
+    @Override
+    public void requestFocus() {
+        super.requestFocus();
+        slider.requestFocus();
     }
 
     private void onOK(ActionEvent ae){
+        ok();
+    }
+    private void ok(){
         this.setVisible(false);
         result.troopSelectionResult((int)slider.getValue());
     }
     private void onCancel(ActionEvent ae){
+        cancel();
+    }
+    private void cancel(){
         this.setVisible(false);
         result.troopSelectionResult(-1);
     }
