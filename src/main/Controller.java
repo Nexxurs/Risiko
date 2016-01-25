@@ -85,6 +85,11 @@ public class Controller implements TroopSelectionResult{
                     if(data.attackNation(selected, data.getNations().get(nationID),true)) capture = new Nation[]{selected,data.getNations().get(nationID)};
                     else capture = null;
                     if(selected.getOwner().getOwendNations() == nations.length) gui.showEndScreen(true);
+                    else if(capture != null && selected.getTrupps() > 2)
+                    {
+                        attack = true;
+                        gui.showTruppSelection("send reinforcments from " + selected + " to " + nationID, 1, selected.getTrupps() - 1);
+                    }
                 }
             }
         }

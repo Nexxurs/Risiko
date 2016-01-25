@@ -86,6 +86,7 @@ public class DataSystem {
             if(player) statusProperty().setValue(status + "\n"+ "Player 1 captured " + defender);
             return true;
         }
+        else if(player) statusProperty().setValue(status);
         return false;
     }
 
