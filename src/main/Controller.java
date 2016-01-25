@@ -25,7 +25,10 @@ public class Controller implements TroopSelectionResult{
         nations = data.getNations().keySet().toArray(new String[data.getNations().keySet().toArray().length]);
         continents = data.getContinents().keySet().toArray(new String[data.getContinents().keySet().toArray().length]);
         this.gui = gui;
-        computer = new RandomNPC(Owner.Player2);
+    }
+
+    public void setComputerPlayer(NPC npc){
+        this.computer=npc;
     }
 
     public void clickedNext()

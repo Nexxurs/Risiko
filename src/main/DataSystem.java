@@ -20,7 +20,7 @@ public class DataSystem {
 
 
     private DataSystem(){
-        status = new SimpleStringProperty("Status");
+        status = new SimpleStringProperty("Please claim your Territory");
 
 
     }

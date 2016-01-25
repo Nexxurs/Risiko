@@ -1,6 +1,7 @@
 package main;
 
 import interfaces.Gui;
+import interfaces.NPC;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -28,6 +29,7 @@ public class Main extends Application implements Gui {
     private Controller controller;
     private TroopSelector troopSelector;
     private Endscreen endscreen;
+    private Startscreen startscreen;
 
     // ----- Produce Stage -----
     @Override
@@ -57,16 +59,24 @@ public class Main extends Application implements Gui {
         root.getChildren().add(troopSelector);
 
         endscreen = new Endscreen(SCREENWIDTH, 150);
-        endscreen.setLayoutY((SCREENHEIGHT-150)/2);
+        endscreen.setLayoutY((SCREENHEIGHT-endscreen.getPrefHeight())/2);
         endscreen.setVisible(false);
         root.getChildren().add(endscreen);
+
+        startscreen=new Startscreen(300,150,this);
+        startscreen.setLayoutY((SCREENHEIGHT-startscreen.getPrefHeight())/2);
+        startscreen.setLayoutX((SCREENWIDTH-startscreen.getPrefWidth())/2);
+        root.getChildren().add(startscreen);
+
 
 
         Scene scene = new Scene(root,SCREENWIDTH,SCREENHEIGHT);
         primaryStage.setTitle("All those Territories");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
 
+        startscreen.requestFocus();
 
     }
 
@@ -247,6 +257,12 @@ public class Main extends Application implements Gui {
         endscreen.setVisible(true);
     }
 
+    @Override
+    public void setOpponent(NPC opponent) {
+        if(opponent==null) System.err.println("Opponent konnte nicht festgestellt werden!");
+        else controller.setComputerPlayer(opponent);
+    }
+
     // ------ Private Methods
 
     private void mouseClickHandler(MouseEvent me){
@@ -262,7 +278,7 @@ public class Main extends Application implements Gui {
     }
 
     private boolean worldResponsive(){
-        if(!troopSelector.isVisible() && !endscreen.isVisible()) return true;
+        if(!troopSelector.isVisible() && !endscreen.isVisible() && !startscreen.isVisible()) return true;
         else return false;
     }
 

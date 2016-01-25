@@ -6,4 +6,5 @@ package interfaces;
 public interface Gui {
     void showTruppSelection(String title, int min, int max);
     void showEndScreen(boolean Player1Win);
+    void setOpponent(NPC opponent);
 }

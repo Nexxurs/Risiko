@@ -26,9 +26,7 @@ public class RandomNPC extends NPC{
         for(String nation : nations){
             Nation currNation = data.getNations().get(nation);
             if(currNation.getOwner().equals(Owner.Unowned)){
-                currNation.setOwner(owner);
-                currNation.setTrupps(1);
-                owner.addOwendNations();
+                data.claimNation(currNation,owner);
                 return;
             }
         }
