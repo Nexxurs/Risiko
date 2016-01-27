@@ -8,6 +8,7 @@ import javafx.scene.paint.Paint;
 
 /**
  * Created by Paul on 07.01.2016.
+ * Contains the information of a nation. Will be initiated when the world gets initiated
  */
 public class Nation {
     private String name;
@@ -28,7 +29,13 @@ public class Nation {
         color = new SimpleObjectProperty<>(owner.getColor());
     }
 
+    /**
+     * Will only be used at the initiation of the gui,
+     * because the neighbors are declared after the designing of each nation
+     * @param newNeighbor
+     */
     public void addNeighbor(String newNeighbor) {
+        //if first neighbor, produce new array
         if(neighbors==null) {
             neighbors = new String[]{newNeighbor};
             return;
@@ -36,7 +43,6 @@ public class Nation {
         String[] newArray = new String[neighbors.length+1];
         for(int i =0;i<neighbors.length;i++){
             if(neighbors[i].equals(newNeighbor)){
-                //System.out.println(name+" already has neighbor "+newNeighbor);
                 return;
             }
             newArray[i]=neighbors[i];
@@ -45,6 +51,11 @@ public class Nation {
         neighbors=newArray;
     }
 
+    /**
+     * returns true, if nation is neighbor of current nation
+     * @param nation
+     * @return
+     */
     public boolean isNeighbors(String nation){
         for (int i = 0; i < neighbors.length; i++)
         {
@@ -105,10 +116,20 @@ public class Nation {
     public int getCapitalY() {
         return capitalY;
     }
+
+    /**
+     * Sets the x coordinate of the capital of the Nation. Cannot be in constructor,
+     * because the value is declared after the initial construction of the nation
+     * @param capitalX
+     */
     public void setCapitalX(int capitalX) {
         this.capitalX = capitalX;
     }
-
+    /**
+     * Sets the y coordinate of the capital of the Nation. Cannot be in constructor,
+     * because the value is declared after the initial construction of the nation
+     * @param capitalY
+     */
     public void setCapitalY(int capitalY) {
         this.capitalY = capitalY;
     }

@@ -9,7 +9,8 @@ import java.util.Map;
 
 /**
  * Created by Paul on 07.01.2016.
- * Ist ein Singleton, damit GUI und Controller immer auf die gleichen Daten zugreifen
+ * Is a Singleton, so GUI and controller have access to the same data.
+ * It contains a Map for the nations, the continents and a String for the status line on screen
  */
 public class DataSystem {
     private static DataSystem system;
@@ -18,12 +19,20 @@ public class DataSystem {
     private StringProperty status;
 
 
-
+    /**
+     * private constructor, because it is a singleton. Will be initiated once at the beginning,
+     * when it is needed the first time, so the status is for the first phase of the game.
+     */
     private DataSystem(){
         status = new SimpleStringProperty("Please claim your Territory");
 
 
     }
+
+    /**
+     * Get Singleton instance of DataSystem. If there is no instance, construct it
+     * @return
+     */
     public static DataSystem getInstance(){
         if(system==null){
             system=new DataSystem();
@@ -45,6 +54,11 @@ public class DataSystem {
         return continents;
     }
 
+    /**
+     * Manipulate the DataSystem so the owner of the nation changes to a new one
+     * @param nation
+     * @param owner
+     */
     public void claimNation(Nation nation, Owner owner){
         nation.setOwner(owner);
         nation.setTrupps(1);
@@ -52,7 +66,7 @@ public class DataSystem {
     }
 
     /**
-     *
+     *  Attack a nation as another nation.
      * @param attacker
      * @param defender
      * @param player true if a player attacks
@@ -90,6 +104,11 @@ public class DataSystem {
         return false;
     }
 
+    /**
+     * Help method for attack method
+     * @param rolls
+     * @return
+     */
     public static String rollDice(int[] rolls)
     {
         for (int i = 0; i < rolls.length; i++)

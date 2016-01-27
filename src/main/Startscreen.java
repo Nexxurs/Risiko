@@ -16,17 +16,21 @@ import javafx.scene.text.Font;
 
 /**
  * Created by Paul on 25.01.2016.
+ * Is visible at the beginning of the game to choose a opponent
  */
 public class Startscreen extends VBox {
-    int prefWidth, prefHeight;
     Button start;
     ToggleGroup toggleGroup;
     Gui gui;
 
+    /**
+     * Constructor needs a gui, which gets the chosen opponent.
+     * @param prefWidth
+     * @param prefHeight
+     * @param gui
+     */
     public Startscreen(int prefWidth, int prefHeight, Gui gui){
         super();
-        this.prefWidth=prefWidth;
-        this.prefHeight=prefHeight;
         this.setPrefSize(prefWidth,prefHeight);
         this.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE,null,null)));
         this.setAlignment(Pos.TOP_CENTER);
@@ -42,15 +46,16 @@ public class Startscreen extends VBox {
         Label text = new Label("Please select your Opponent");
         this.getChildren().add(text);
 
+        //Togglegroup is used to get the chosen opponent.
         toggleGroup = new ToggleGroup();
         HBox opponentPicker = new HBox();
         opponentPicker.setAlignment(Pos.CENTER);
         opponentPicker.setSpacing(10);
         RadioButton random = new RadioButton("Random");
         random.setToggleGroup(toggleGroup);
+        opponentPicker.getChildren().add(random);
         RadioButton tactical = new RadioButton("Tactical");
         tactical.setToggleGroup(toggleGroup);
-        opponentPicker.getChildren().add(random);
         opponentPicker.getChildren().add(tactical);
         toggleGroup.selectToggle(toggleGroup.getToggles().get(0));
         this.getChildren().add(opponentPicker);
@@ -68,10 +73,13 @@ public class Startscreen extends VBox {
         String opponentName = selectedButton.getText();
         if(opponentName.equals("Random")) gui.setOpponent(new RandomNPC(Owner.Player2));
         else if(opponentName.equals("Tactical")) gui.setOpponent(new TacticalNPC(Owner.Player2));
-        else gui.setOpponent(null);
+        else gui.setOpponent(null); //Null should never happen, because under normal circumstances one radio button needs to be selected
         this.setVisible(false);
     }
 
+    /**
+     * requestFocus sets focus on the start button, so the game can be started by hitting the Enter button
+     */
     @Override
     public void requestFocus() {
         super.requestFocus();

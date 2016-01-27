@@ -29,17 +29,21 @@ public class TroopSelector extends VBox {
     private double prefHeight = 170;
     private double prefWidth = 220;
 
+    /**
+     * Constructor
+     * @param result The class, where the result of the Troop Selection should be send to
+     */
     public TroopSelector(TroopSelectionResult result){
         super();
         this.result = result;
 
-
-
+        //Design of the Background and Border
         this.setAlignment(Pos.CENTER);
         this.setBackground(new Background(new BackgroundFill(Color.WHITE,null,null)));
         this.setStyle("-fx-border-width: 1; -fx-border-style: solid; -fx-border-color: black");
         this.setPrefSize(prefWidth,prefHeight);
 
+        //Fill the Pane with a Label, a Slider and 2 Buttons
         label = new Label("Select Number of Troops");
         label.setFont(Font.font(15));
         label.setTextAlignment(TextAlignment.CENTER);
@@ -53,13 +57,13 @@ public class TroopSelector extends VBox {
         slider.setMinorTickCount(0);
         slider.setBlockIncrement(1);
         slider.setSnapToTicks(true);
-        slider.setOnKeyPressed(event -> {
+        slider.setOnKeyPressed(event -> {       //React to Enter and Escape Key pressed
             if(event.getCode()== KeyCode.ENTER) ok();
             else if(event.getCode()==KeyCode.ESCAPE) cancel();
         });
 
         this.getChildren().add(slider);
-
+        //Put the Buttons in a horizontal Box
         HBox buttonBox = new HBox();
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(5,5,5,5));
@@ -75,6 +79,9 @@ public class TroopSelector extends VBox {
         this.getChildren().add(buttonBox);
     }
 
+    /**
+     * requestFocus should focus on the slider, so it can be controlled by the arrow keys
+     */
     @Override
     public void requestFocus() {
         super.requestFocus();
@@ -88,14 +95,15 @@ public class TroopSelector extends VBox {
         this.setVisible(false);
         result.troopSelectionResult((int)slider.getValue());
     }
+
     private void onCancel(ActionEvent ae){
         cancel();
     }
     private void cancel(){
         this.setVisible(false);
-        result.troopSelectionResult(-1);
+        result.troopSelectionResult(-1); //Returns -1, when no value is chosen (= cancel button pressed)
     }
-
+    //public setters, so the values can be changed before the troopselector becomes visible
     public void setTitle(String title){
         label.setText(title);
     }

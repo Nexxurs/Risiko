@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Risiko:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Risiko_jar</output-path>
+    <root id="archive" name="Risiko.jar">
+      <element id="module-output" name="Risiko" />
+      <element id="directory" name="resources">
+        <element id="file-copy" path="$PROJECT_DIR$/resources/world.map" />
+      </element>
+    </root>
+  </artifact>
+</component>

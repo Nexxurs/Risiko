@@ -7,22 +7,28 @@ import javafx.scene.paint.Paint;
 
 /**
  * Created by Paul on 07.01.2016.
+ * Owner as an enum, so the Values can be changed globally (enum is automatically a singleton)
  */
 public enum Owner {
-    Player1(Color.BLUE,Color.DODGERBLUE,0,0),
-    Player2(Color.RED,Color.INDIANRED,0,0),
-    Unowned(Color.GRAY,Color.GRAY,0,0);
+    Player1(Color.BLUE,Color.DODGERBLUE),
+    Player2(Color.RED,Color.INDIANRED),
+    Unowned(Color.GRAY,Color.GRAY);
 
     private Paint color;
     private Paint highlightColor;
     private int owendNations;
     private int reinforcment;
 
-    Owner(Paint color,Paint hightlight,int owendNations,int reinforcment){
+    /**
+     * Constructor
+     * @param color color for nation, when it's in idle status
+     * @param hightlight color for nation, if it is highlighted
+     */
+    Owner(Paint color,Paint hightlight){
         this.color=color;
         this.highlightColor=hightlight;
-        this.owendNations=owendNations;
-        this.reinforcment=reinforcment;
+        this.owendNations=0;
+        this.reinforcment=0;
     }
 
     public Paint getColor(){
