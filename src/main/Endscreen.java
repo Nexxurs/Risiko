@@ -35,11 +35,11 @@ public class Endscreen extends StackPane {
         if(win){
             text.setText(playerName+" Won!");
             text.setTextFill(Color.BLUE);
-            this.setStyle(this.getStyle()+"-fx-border-color: blue;");
+            this.setStyle(this.getStyle()+"-fx-border-color: darkblue;");
         } else {
             text.setText(playerName+" Lost!");
             text.setTextFill(Color.RED);
-            this.setStyle(this.getStyle()+"-fx-border-color: red;");
+            this.setStyle(this.getStyle()+"-fx-border-color: darkred;");
         }
     }
 }

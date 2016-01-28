@@ -59,7 +59,7 @@ public class Controller implements TroopSelectionResult{
                     selected.setHighlight(false);
                     selected = data.getNations().get(nationID);
                     selected.setHighlight(true);
-                    if(Owner.Player1.getReinforcment() > 1) gui.showTruppSelection("send reinforcement to" + nationID,1,Owner.Player1.getReinforcment());
+                    if(Owner.Player1.getReinforcment() > 1) gui.showTruppSelection("send reinforcement to " + selected,1,Owner.Player1.getReinforcment());
                     else
                     {
                         selected.setTrupps(selected.getTrupps() + 1);
