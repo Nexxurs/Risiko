@@ -90,7 +90,7 @@ public class DataSystem {
             if(attack[attack.length-1-i]>defend[defend.length-1-i]) defender.setTrupps(defender.getTrupps()-1);
             else attacker.setTrupps(attacker.getTrupps()-1);
         }
-        if(defender.getTrupps() == 0)
+        if(defender.getTrupps() <= 0)
         {
             defender.getOwner().decOwendNations();
             defender.setOwner(attacker.getOwner());
