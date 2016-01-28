@@ -201,7 +201,7 @@ public class Main extends Application implements Gui {
                 count.setLayoutY(y);
                 count.textProperty().bind(nation.getTruppCounter().asString());
                 count.setId(nameNoSpace);
-                count.setOnMouseClicked(this::mouseClickHandler);
+                count.setMouseTransparent(true);
                 world.getChildren().add(count);
 
 
