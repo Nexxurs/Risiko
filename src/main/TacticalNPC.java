@@ -111,7 +111,7 @@ public class TacticalNPC extends NPC {
                 for(int i =0;i<currNation.getNeighbors().length;i++){
                     Nation currNeighbor = data.getNations().get(currNation.getNeighbors()[i]);
                     if(!currNeighbor.getOwner().equals(owner)){
-                        threatLevel+=(currNeighbor.getTrupps()/currNation.getTrupps());
+                        threatLevel+=(currNeighbor.getTroops()/currNation.getTroops());
                     }
                 }
 
@@ -130,7 +130,7 @@ public class TacticalNPC extends NPC {
             Nation currNation = data.getNations().get(nation);
             int newTroops = (int)Math.round((threatMap.get(nation)/totalThreat)*owner.getReinforcment()); //give Reinforcements to a nation in relation to the total threat of all nations
             totalReinforcement+=newTroops;
-            currNation.setTrupps(currNation.getTrupps()+(int)newTroops);
+            currNation.setTroops(currNation.getTroops()+(int)newTroops);
         }
         owner.decReinforcment(totalReinforcement);
 
@@ -141,7 +141,7 @@ public class TacticalNPC extends NPC {
         }
         //Give that nation the remaining reinforcements
         Nation highestThreatNation = data.getNations().get(highestThreat);
-        highestThreatNation.setTrupps(highestThreatNation.getTrupps()+owner.getReinforcment());
+        highestThreatNation.setTroops(highestThreatNation.getTroops()+owner.getReinforcment());
         owner.decReinforcment(owner.getReinforcment());
     }
 
@@ -157,15 +157,15 @@ public class TacticalNPC extends NPC {
         for(String nation : nations)
         {
             Nation currNation = data.getNations().get(nation);
-            if(currNation.getOwner().equals(owner) && currNation.getTrupps()>=2){
+            if(currNation.getOwner().equals(owner) && currNation.getTroops()>=2){
 
                 for(String neighbor : currNation.getNeighbors()){
                     Nation currNeighbor = data.getNations().get(neighbor);
                     if(!currNeighbor.getOwner().equals(owner)){
                         double attackProbability = rnd.nextDouble()*2.5;
-                        //System.out.println(currNation.toString()+"("+(currNation.getTrupps()-1)+")"+" vs "+currNeighbor.toString()+"("+currNeighbor.getTrupps()+")"+": "+attackProbability);
-                        if(attackProbability<= ((currNation.getTrupps()-1)/currNeighbor.getTrupps())){
-                            while(currNation.getTrupps()>1){
+                        //System.out.println(currNation.toString()+"("+(currNation.getTroops()-1)+")"+" vs "+currNeighbor.toString()+"("+currNeighbor.getTroops()+")"+": "+attackProbability);
+                        if(attackProbability<= ((currNation.getTroops()-1)/currNeighbor.getTroops())){
+                            while(currNation.getTroops()>1){
                                 if(data.attackNation(currNation,currNeighbor,false)){
                                     break;
                                 }

@@ -61,7 +61,7 @@ public class DataSystem {
      */
     public void claimNation(Nation nation, Owner owner){
         nation.setOwner(owner);
-        nation.setTrupps(1);
+        nation.setTroops(1);
         owner.addOwendNations();
     }
 
@@ -78,25 +78,25 @@ public class DataSystem {
         int[] attack;
         int[] defend;
         String status = "Attacked " + defender + " from " + attacker + "\n";
-        if(attacker.getTrupps()> 3) attack = new int[3];
-        else attack = new int[attacker.getTrupps()-1];
-        if(defender.getTrupps()>= 2) defend = new int[2];
+        if(attacker.getTroops()> 3) attack = new int[3];
+        else attack = new int[attacker.getTroops()-1];
+        if(defender.getTroops()>= 2) defend = new int[2];
         else defend = new int[1];
         status += "Attackers dice: ";
         status += rollDice(attack) + " Defenders dice: ";
         status += rollDice(defend);
         for (int i = 0; (i < attack.length)&&(i<defend.length); i++)
         {
-            if(attack[attack.length-1-i]>defend[defend.length-1-i]) defender.setTrupps(defender.getTrupps()-1);
-            else attacker.setTrupps(attacker.getTrupps()-1);
+            if(attack[attack.length-1-i]>defend[defend.length-1-i]) defender.setTroops(defender.getTroops()-1);
+            else attacker.setTroops(attacker.getTroops()-1);
         }
-        if(defender.getTrupps() <= 0)
+        if(defender.getTroops() <= 0)
         {
             defender.getOwner().decOwendNations();
             defender.setOwner(attacker.getOwner());
-            defender.setTrupps(1);
+            defender.setTroops(1);
             attacker.getOwner().addOwendNations();
-            attacker.setTrupps(attacker.getTrupps()-1);
+            attacker.setTroops(attacker.getTroops()-1);
             if(player) statusProperty().setValue(status + "\n"+ "Player 1 captured " + defender);
             return true;
         }
@@ -107,7 +107,7 @@ public class DataSystem {
     /**
      * Help method for attack method
      * @param rolls
-     * @return
+     * @return random natural number from 1 to 6
      */
     public static String rollDice(int[] rolls)
     {

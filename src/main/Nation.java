@@ -89,10 +89,10 @@ public class Nation {
         return truppCounter;
     }
 
-    public int getTrupps(){
+    public int getTroops(){
         return truppCounter.get();
     }
-    public void setTrupps(int value){
+    public void setTroops(int value){
         truppCounter.setValue(value);
     }
 

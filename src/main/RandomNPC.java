@@ -50,7 +50,7 @@ public class RandomNPC extends NPC{
                 Nation currNation = data.getNations().get(nation);
                 if(currNation.getOwner().equals(owner)){
                     int rndNr = rnd.nextInt(owner.getReinforcment())+1;
-                    currNation.setTrupps(currNation.getTrupps()+rndNr);
+                    currNation.setTroops(currNation.getTroops()+rndNr);
                     owner.decReinforcment(rndNr);
                     if(owner.getReinforcment() <= 0) return;
                 }
@@ -70,13 +70,13 @@ public class RandomNPC extends NPC{
         for(String nation : nations)
         {
             Nation currNation = data.getNations().get(nation);
-            if(currNation.getOwner().equals(owner) && currNation.getTrupps()>=2){
+            if(currNation.getOwner().equals(owner) && currNation.getTroops()>=2){
                 for(String neighbor : currNation.getNeighbors()){
                     int rndNr = rnd.nextInt(10);
                     if(rndNr<=2){
                         Nation currNeighbor = data.getNations().get(neighbor);
                         if(!currNeighbor.getOwner().equals(owner)){
-                            while(currNation.getTrupps()>1){
+                            while(currNation.getTroops()>1){
                                 if(data.attackNation(currNation,currNeighbor,false)){
                                     break;
                                 }
