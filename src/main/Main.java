@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -197,6 +198,7 @@ public class Main extends Application implements Gui {
 
                 //Connect Label to the dataSystem
                 Label count = new Label();
+                count.setFont(Font.font(14));
                 count.setLayoutX(x);
                 count.setLayoutY(y);
                 count.textProperty().bind(nation.getTruppCounter().asString());
