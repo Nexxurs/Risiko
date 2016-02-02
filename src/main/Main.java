@@ -338,7 +338,7 @@ public class Main extends Application implements Gui {
      * @param min
      * @param max
      */
-    public void showTruppSelection(String title, int min, int max){
+    public void showTroopSelection(String title, int min, int max){
         troopSelector.setTitle(title);
         troopSelector.setSliderValues(min, max);
         troopSelector.setVisible(true);
